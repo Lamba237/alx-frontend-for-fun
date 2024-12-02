@@ -1,5 +1,32 @@
-/* Sort */
-@import'103-sort_list.scss';
+/* Sort! */
+@import "103-sort_list.scss";
+
+@function str-compare($str1, $str2) {
+  @if $str1 == $str2 {
+    @return 0;
+  }
+  @else {
+    $min-length: min(length($str1), length($str2));
+    @for $i from 1 through $min-length {
+      $char1: str-slice($str1, $i, $i);
+      $char2: str-slice($str2, $i, $i);
+      @if $char1 != $char2 {
+        @if $char1 > $char2 {
+          @return 1;
+        }
+        @else {
+          @return -1;
+        }
+      }
+    }
+    @if length($str1) > length($str2) {
+      @return 1;
+    }
+    @else {
+      @return -1;
+    }
+  }
+}
 
 @function sort-list($list) {
   $length: length($list);
@@ -7,7 +34,7 @@
     @for $j from 1 through $length - $i {
       $current: nth($list, $j);
       $next: nth($list, $j + 1);
-      @if $current > $next {
+      @if str-compare($current, $next) > 0 {
         $list: set-nth($list, $j, $next);
         $list: set-nth($list, $j + 1, $current);
       }
